@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["main"],{
 
 /***/ "../../node_modules/moment/locale sync recursive ^\\.\\/.*$":
-/*!*****************************************************************************!*\
-  !*** C:/Git/Cinemasunshine/ticket/node_modules/moment/locale sync ^\.\/.*$ ***!
-  \*****************************************************************************/
+/*!************************************************************************************************************!*\
+  !*** C:/Users/hataguchi/Desktop/workspace/Cinema Sunshine/ticket/node_modules/moment/locale sync ^\.\/.*$ ***!
+  \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5912,7 +5912,7 @@ var PurchaseComponent = /** @class */ (function () {
      */
     PurchaseComponent.prototype.getScreeningEvents = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var branchCode, findResult, screeningEvents;
+            var branchCode, findResult, screeningEvents, filterResult;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.sasaki.getServices()];
@@ -5933,7 +5933,32 @@ var PurchaseComponent = /** @class */ (function () {
                             })];
                     case 2:
                         screeningEvents = _a.sent();
-                        return [2 /*return*/, screeningEvents.data];
+                        filterResult = screeningEvents.data.filter(function (screeningEvent) {
+                            if (screeningEvent.coaInfo === undefined) {
+                                return false;
+                            }
+                            var now = moment__WEBPACK_IMPORTED_MODULE_3__().toDate();
+                            var reservationStartDate = moment__WEBPACK_IMPORTED_MODULE_3__(screeningEvent.coaInfo.rsvEndDate).toDate();
+                            var alternativeHeadline = screeningEvent.superEvent.alternativeHeadline;
+                            if (alternativeHeadline === undefined
+                                || alternativeHeadline === null
+                                || typeof alternativeHeadline !== 'string'
+                                || alternativeHeadline.length !== 12
+                                || alternativeHeadline.match(/^[0-9]+$/) === null) {
+                                return true;
+                            }
+                            var formatResult = (alternativeHeadline.length === 12)
+                                // tslint:disable-next-line:max-line-length
+                                ? alternativeHeadline.slice(0, 4) + "-" + alternativeHeadline.slice(4, 6) + "-" + alternativeHeadline.slice(6, 8) + " " + alternativeHeadline.slice(8, 10) + ":" + alternativeHeadline.slice(10, 12)
+                                : alternativeHeadline;
+                            if (alternativeHeadline !== undefined
+                                && alternativeHeadline !== null
+                                && moment__WEBPACK_IMPORTED_MODULE_3__(formatResult).isValid()) {
+                                reservationStartDate = moment__WEBPACK_IMPORTED_MODULE_3__(formatResult).toDate();
+                            }
+                            return (now > reservationStartDate);
+                        });
+                        return [2 /*return*/, filterResult];
                 }
             });
         });
@@ -11878,7 +11903,7 @@ _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__["platformBrowser"]().boot
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Git\Cinemasunshine\ticket\src\client\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\hataguchi\Desktop\workspace\Cinema Sunshine\ticket\src\client\src\main.ts */"./src/main.ts");
 
 
 /***/ }),

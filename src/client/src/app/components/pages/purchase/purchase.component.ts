@@ -259,7 +259,33 @@ export class PurchaseComponent implements OnInit {
             superEvent: { locationBranchCodes: [branchCode] }
         });
 
-        return screeningEvents.data;
+        const filterResult = screeningEvents.data.filter((screeningEvent) => {
+            if (screeningEvent.coaInfo === undefined) {
+                return false;
+            }
+            const now = moment().toDate();
+            let reservationStartDate = moment(screeningEvent.coaInfo.rsvEndDate).toDate();
+            const alternativeHeadline = screeningEvent.superEvent.alternativeHeadline;
+            if (alternativeHeadline === undefined
+                || alternativeHeadline === null
+                || typeof alternativeHeadline !== 'string'
+                || alternativeHeadline.length !== 12
+                || alternativeHeadline.match(/^[0-9]+$/) === null) {
+                return true;
+            }
+            const formatResult = (alternativeHeadline.length === 12)
+                // tslint:disable-next-line:max-line-length
+                ? `${alternativeHeadline.slice(0, 4)}-${alternativeHeadline.slice(4, 6)}-${alternativeHeadline.slice(6, 8)} ${alternativeHeadline.slice(8, 10)}:${alternativeHeadline.slice(10, 12)}`
+                : alternativeHeadline;
+            if (alternativeHeadline !== undefined
+                && alternativeHeadline !== null
+                && moment(formatResult).isValid()) {
+                reservationStartDate = moment(formatResult).toDate();
+            }
+            return (now > reservationStartDate);
+        });
+
+        return filterResult;
     }
 
     /**
