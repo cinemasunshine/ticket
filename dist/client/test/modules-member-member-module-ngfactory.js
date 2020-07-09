@@ -7706,11 +7706,13 @@ var MemberPointHistoryComponent = /** @class */ (function () {
                         return [4 /*yield*/, this.cinerino.ownerShipInfo.searchAccountMoneyTransferActions({
                                 id: 'me',
                                 accountType: _cinerino_api_javascript_client__WEBPACK_IMPORTED_MODULE_2__["factory"].accountType.Point,
-                                accountNumber: this.user.data.accounts[0].typeOfGood.accountNumber
+                                accountNumber: this.user.data.accounts[0].typeOfGood.accountNumber,
+                                limit: 100
                             })];
                     case 3:
                         result = _a.sent();
-                        this.accountMoneyTransferActions = result.data;
+                        this.accountMoneyTransferActions =
+                            result.data.filter(function (a) { return a.actionStatus === _cinerino_api_javascript_client__WEBPACK_IMPORTED_MODULE_2__["factory"].pecorino.actionStatusType.CompletedActionStatus; });
                         return [3 /*break*/, 5];
                     case 4:
                         error_1 = _a.sent();
@@ -8217,7 +8219,6 @@ var PointHistoryListComponent = /** @class */ (function () {
     function PointHistoryListComponent() {
     }
     PointHistoryListComponent.prototype.ngOnInit = function () {
-        console.log(this.action);
         var transactionType = _cinerino_api_javascript_client__WEBPACK_IMPORTED_MODULE_1__["factory"].pecorino.transactionType;
         this.date = moment__WEBPACK_IMPORTED_MODULE_2__(this.action.endDate).format('YYYY年MM月DD日 HH:mm');
         this.description = (this.action.description !== undefined)

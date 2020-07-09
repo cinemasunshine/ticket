@@ -33,9 +33,11 @@ export class MemberPointHistoryComponent implements OnInit {
             const result = await this.cinerino.ownerShipInfo.searchAccountMoneyTransferActions<factory.accountType.Point>({
                 id: 'me',
                 accountType: factory.accountType.Point,
-                accountNumber: this.user.data.accounts[0].typeOfGood.accountNumber
+                accountNumber: this.user.data.accounts[0].typeOfGood.accountNumber,
+                limit: 100
             });
-            this.accountMoneyTransferActions = result.data;
+            this.accountMoneyTransferActions =
+                result.data.filter(a => a.actionStatus === factory.pecorino.actionStatusType.CompletedActionStatus);
         } catch (error) {
             console.error(error);
             this.router.navigate(['/error', { redirect: '/member/point/history' }]);
